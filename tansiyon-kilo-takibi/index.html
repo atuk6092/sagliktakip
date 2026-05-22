@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f766e" />
+  <meta name="description" content="Tansiyon, kilo, yürüyüş ve yeme takibi için PWA uygulaması." />
+  <title>Tansiyon Kilo Takibi</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">❤</div>
+        <div>
+          <h1>Tansiyon Kilo Takibi</h1>
+          <p>Sağlık verilerin tek dashboard'da</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="installBtn" class="btn ghost hidden">Telefona Kur</button>
+        <button id="syncBtn" class="btn ghost" title="Google/Firebase ayarı yapılınca bulut senkron açılır">Google ile Giriş</button>
+        <button id="logoutBtn" class="btn ghost hidden">Çıkış</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="status-card" id="statusCard">
+        <span class="dot"></span>
+        <span id="statusText">Yerel mod: Veriler bu cihazda saklanıyor.</span>
+      </section>
+
+      <section class="grid stats-grid" aria-label="Özet">
+        <article class="stat-card danger">
+          <span class="stat-label">Son Tansiyon</span>
+          <strong id="lastBp">—</strong>
+          <small id="lastBpMeta">Kayıt yok</small>
+        </article>
+        <article class="stat-card primary">
+          <span class="stat-label">Son Kilo</span>
+          <strong id="lastWeight">—</strong>
+          <small id="lastWeightMeta">Kayıt yok</small>
+        </article>
+        <article class="stat-card success">
+          <span class="stat-label">Bu Hafta Yürüyüş</span>
+          <strong id="weekWalk">0 dk</strong>
+          <small id="weekSteps">0 adım</small>
+        </article>
+        <article class="stat-card amber">
+          <span class="stat-label">Bugünkü Öğün</span>
+          <strong id="todayMeals">0</strong>
+          <small id="todayCalories">0 kcal</small>
+        </article>
+      </section>
+
+      <section class="layout">
+        <aside class="panel form-panel">
+          <div class="tabs" role="tablist" aria-label="Kayıt türü">
+            <button class="tab active" data-type="bp">Tansiyon</button>
+            <button class="tab" data-type="weight">Kilo</button>
+            <button class="tab" data-type="walk">Yürüyüş</button>
+            <button class="tab" data-type="meal">Yeme</button>
+          </div>
+
+          <form id="entryForm" class="entry-form">
+            <input type="hidden" id="entryType" value="bp" />
+            <label>
+              Tarih / Saat
+              <input id="dateTime" type="datetime-local" required />
+            </label>
+
+            <div id="bpFields" class="type-fields">
+              <div class="row two">
+                <label>Sistolik / Büyük
+                  <input id="systolic" type="number" inputmode="numeric" min="50" max="260" placeholder="120" />
+                </label>
+                <label>Diyastolik / Küçük
+                  <input id="diastolic" type="number" inputmode="numeric" min="30" max="180" placeholder="80" />
+                </label>
+              </div>
+              <label>Nabız
+                <input id="pulse" type="number" inputmode="numeric" min="30" max="220" placeholder="75" />
+              </label>
+            </div>
+
+            <div id="weightFields" class="type-fields hidden">
+              <label>Kilo (kg)
+                <input id="weight" type="number" inputmode="decimal" min="20" max="300" step="0.1" placeholder="78.5" />
+              </label>
+            </div>
+
+            <div id="walkFields" class="type-fields hidden">
+              <div class="row two">
+                <label>Süre (dk)
+                  <input id="walkMinutes" type="number" inputmode="numeric" min="1" max="1440" placeholder="30" />
+                </label>
+                <label>Adım
+                  <input id="steps" type="number" inputmode="numeric" min="0" max="100000" placeholder="4000" />
+                </label>
+              </div>
+              <label>Mesafe (km)
+                <input id="distance" type="number" inputmode="decimal" min="0" max="100" step="0.01" placeholder="2.5" />
+              </label>
+            </div>
+
+            <div id="mealFields" class="type-fields hidden">
+              <div class="row two">
+                <label>Öğün
+                  <select id="mealType">
+                    <option>Kahvaltı</option>
+                    <option>Öğle</option>
+                    <option>Akşam</option>
+                    <option>Ara Öğün</option>
+                  </select>
+                </label>
+                <label>Kalori
+                  <input id="calories" type="number" inputmode="numeric" min="0" max="10000" placeholder="450" />
+                </label>
+              </div>
+              <label>Yediklerin
+                <input id="food" type="text" maxlength="120" placeholder="Örn. Tavuk salata" />
+              </label>
+            </div>
+
+            <label>Not
+              <textarea id="note" rows="3" maxlength="300" placeholder="İsteğe bağlı not"></textarea>
+            </label>
+
+            <button class="btn primary" type="submit">Kaydet</button>
+          </form>
+        </aside>
+
+        <section class="panel dashboard-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Dashboard</h2>
+              <p>Son kayıtlar ve grafikler</p>
+            </div>
+            <div class="filters">
+              <select id="filterType" aria-label="Kayıt tipi filtresi">
+                <option value="all">Tümü</option>
+                <option value="bp">Tansiyon</option>
+                <option value="weight">Kilo</option>
+                <option value="walk">Yürüyüş</option>
+                <option value="meal">Yeme</option>
+              </select>
+              <button id="exportBtn" class="btn ghost small">Dışa Aktar</button>
+              <label class="btn ghost small file-label">İçe Aktar<input id="importFile" type="file" accept="application/json" /></label>
+            </div>
+          </div>
+
+          <div class="charts">
+            <article class="chart-card">
+              <h3>Tansiyon Trendi</h3>
+              <canvas id="bpChart" width="640" height="260"></canvas>
+            </article>
+            <article class="chart-card">
+              <h3>Kilo Trendi</h3>
+              <canvas id="weightChart" width="640" height="260"></canvas>
+            </article>
+          </div>
+
+          <div class="records-header">
+            <h3>Kayıtlar</h3>
+            <button id="clearBtn" class="btn danger small">Tüm Yerel Kayıtları Sil</button>
+          </div>
+          <div id="records" class="records" aria-live="polite"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <template id="recordTemplate">
+    <article class="record">
+      <div class="record-icon"></div>
+      <div class="record-body">
+        <strong class="record-title"></strong>
+        <span class="record-meta"></span>
+        <p class="record-note"></p>
+      </div>
+      <button class="delete-btn" title="Sil">Sil</button>
+    </article>
+  </template>
+
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
