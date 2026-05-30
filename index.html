@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sağlık Takibi">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>Sağlık Takibi - Tansiyon, Kilo, Su</title>
+<style>
+:root{--bg:#ecfeff;--surface:#fff;--muted:#64748b;--text:#0f172a;--primary:#0f766e;--primary2:#14b8a6;--danger:#dc2626;--success:#16a34a;--amber:#d97706;--shadow:0 18px 55px rgba(15,23,42,.12);--radius:22px}*{box-sizing:border-box}body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 10% 0%,#ccfbf1 0,#ecfeff 32%,#f8fafc 100%);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{width:min(1240px,calc(100% - 28px));margin:0 auto;padding:18px 0 34px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0 22px}.brand{display:flex;align-items:center;gap:14px}.logo{width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:white;font-size:26px;box-shadow:var(--shadow)}h1{font-size:clamp(23px,4vw,36px);margin:0;letter-spacing:-.04em}.brand p,.panel-head p{margin:3px 0 0;color:var(--muted)}.actions,.filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.btn{border:0;border-radius:14px;padding:11px 15px;font-weight:800;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}.btn:hover{transform:translateY(-1px)}.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;width:100%;box-shadow:0 12px 28px rgba(15,118,110,.25)}.btn.ghost{background:rgba(255,255,255,.72);color:var(--primary);border:1px solid rgba(15,118,110,.16)}.btn.danger{background:#fee2e2;color:#991b1b}.btn.small{padding:8px 11px;border-radius:11px;font-size:13px}.hidden{display:none!important}.status{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.72);border:1px solid rgba(15,118,110,.14);border-radius:18px;padding:12px 14px;margin-bottom:14px;color:#115e59}.dot{width:10px;height:10px;border-radius:50%;background:#f59e0b;box-shadow:0 0 0 5px rgba(245,158,11,.14)}.status.online .dot{background:#22c55e;box-shadow:0 0 0 5px rgba(34,197,94,.14)}.grid{display:grid;gap:14px}.stats{grid-template-columns:repeat(4,1fr);margin-bottom:14px}.stat{background:var(--surface);border:1px solid rgba(15,23,42,.06);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}.stat:after{content:"";position:absolute;right:-30px;top:-35px;width:100px;height:100px;border-radius:50%;opacity:.12;background:currentColor}.stat strong{display:block;font-size:clamp(24px,4vw,34px);letter-spacing:-.04em;margin:7px 0}.stat span,.stat small{color:var(--muted);font-weight:700}.stat.danger{color:var(--danger)}.stat.primary{color:var(--primary)}.stat.success{color:var(--success)}.stat.amber{color:var(--amber)}.layout{display:grid;grid-template-columns:360px 1fr;gap:14px;align-items:start}.panel{background:rgba(255,255,255,.86);border:1px solid rgba(15,23,42,.08);border-radius:var(--radius);box-shadow:var(--shadow)}.form-panel{padding:14px;position:sticky;top:12px}.dash{padding:18px;min-width:0}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;background:#f1f5f9;border-radius:16px;padding:6px;margin-bottom:14px}.tab{border:0;border-radius:12px;padding:10px 7px;background:transparent;font-weight:900;color:var(--muted);font-size:13px}.tab.active{background:#fff;color:var(--primary);box-shadow:0 6px 16px rgba(15,23,42,.08)}form{display:grid;gap:12px}label{display:grid;gap:7px;font-weight:800;color:#334155}input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:13px;padding:11px 12px;background:#fff;color:var(--text);outline:none}input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(20,184,166,.14)}textarea{resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.panel-head,.rec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.panel-head h2,.rec-head h3,.chart h3{margin:0}.file input{display:none}.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}.chart{background:#f8fafc;border:1px solid #e2e8f0;border-radius:18px;padding:14px;min-width:0}.chart canvas{width:100%;height:210px;display:block}.records{display:grid;gap:10px;max-height:540px;overflow:auto;padding-right:4px}.record{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:17px;padding:12px}.ricon{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:20px;font-weight:900;background:var(--primary)}.rmeta{display:block;color:var(--muted);font-size:13px;margin-top:2px}.rnote{margin:5px 0 0;color:#475569;white-space:pre-wrap}.del{border:0;background:#fee2e2;color:#991b1b;border-radius:11px;padding:8px 10px;font-weight:900}.empty{padding:34px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:18px;background:#fff}.help{margin-top:12px;padding:12px;border-radius:16px;background:#f0fdfa;color:#115e59;font-size:13px;line-height:1.45}@media(max-width:980px){.stats{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.form-panel{position:static}.charts{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.actions{width:100%}}@media(max-width:560px){.app{width:min(100% - 18px,1240px);padding-top:8px}.stats{grid-template-columns:1fr}.two{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(2,1fr)}.panel-head,.rec-head{align-items:flex-start;flex-direction:column}.filters{width:100%}.filters select,.filters .btn{flex:1}.record{grid-template-columns:38px 1fr}.del{grid-column:2;justify-self:start}.ricon{width:38px;height:38px;border-radius:13px}.actions .btn{flex:1}}
+
+/* Açık / koyu mod */
+.avg{margin-bottom:14px}.avg .stat strong{font-size:clamp(21px,3vw,28px)}.time-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}.time-row .btn{height:43px;white-space:nowrap}.person-box{display:grid;gap:10px;margin-bottom:14px;padding:12px;border-radius:18px;background:rgba(240,253,250,.9);border:1px solid rgba(15,118,110,.16)}.person-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:900;color:#0f766e}.person-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.person-actions .btn{padding:9px 10px}.person-note{font-size:12px;color:#64748b;line-height:1.35}
+body.dark{--bg:#020617;--surface:#0f172a;--muted:#94a3b8;--text:#e5e7eb;--primary:#2dd4bf;--primary2:#14b8a6;--danger:#fb7185;--success:#4ade80;--amber:#fbbf24;--shadow:0 18px 55px rgba(0,0,0,.45);background:radial-gradient(circle at 10% 0%,#134e4a 0,#020617 38%,#0f172a 100%);color:var(--text)}
+body.dark .logo{box-shadow:0 14px 40px rgba(45,212,191,.18)}body.dark .brand p,body.dark .panel-head p,body.dark .stat span,body.dark .stat small,body.dark .rmeta{color:var(--muted)}body.dark .btn.ghost{background:rgba(15,23,42,.72);color:#99f6e4;border-color:rgba(45,212,191,.24)}body.dark .btn.danger,body.dark .del{background:#4c0519;color:#fecdd3}body.dark .status{background:rgba(15,23,42,.78);border-color:rgba(45,212,191,.20);color:#ccfbf1}body.dark .stat,body.dark .panel{background:rgba(15,23,42,.90);border-color:rgba(148,163,184,.16)}body.dark .tabs{background:#020617}body.dark .tab{color:#94a3b8}body.dark .tab.active{background:#164e63;color:#ccfbf1;box-shadow:0 8px 24px rgba(0,0,0,.35)}body.dark label{color:#cbd5e1}body.dark input,body.dark select,body.dark textarea{background:#020617;color:#e5e7eb;border-color:#334155}body.dark input::placeholder,body.dark textarea::placeholder{color:#64748b}body.dark input:focus,body.dark select:focus,body.dark textarea:focus{border-color:#2dd4bf;box-shadow:0 0 0 4px rgba(45,212,191,.16)}body.dark .chart{background:#020617;border-color:#1e293b}body.dark .record{background:#020617;border-color:#1e293b}body.dark .rnote{color:#cbd5e1}body.dark .empty{background:#020617;border-color:#334155;color:#94a3b8}body.dark .help,body.dark .person-box{background:#042f2e;color:#ccfbf1;border-color:rgba(45,212,191,.20)}body.dark .person-title{color:#99f6e4}body.dark .person-note{color:#94a3b8}body.dark .stat.danger{color:#fb7185}body.dark .stat.primary{color:#2dd4bf}body.dark .stat.success{color:#4ade80}body.dark .stat.amber{color:#fbbf24}
+
+/* Su takibi kartı */
+.tabs{grid-template-columns:repeat(5,1fr)}
+.water-card{display:flex;gap:18px;align-items:center;padding:18px;margin-bottom:14px}
+.water-ring-wrap{position:relative;flex:0 0 auto;width:150px;height:150px;display:grid;place-items:center}
+.water-ring{width:150px;height:150px;transform:rotate(-90deg)}
+.wr-bg{fill:none;stroke:rgba(14,165,233,.16);stroke-width:11}
+.wr-fg{fill:none;stroke:#0ea5e9;stroke-width:11;stroke-linecap:round;stroke-dasharray:327;stroke-dashoffset:327;transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1)}
+.water-ring-text{position:absolute;inset:0;display:grid;place-content:center;align-content:center;text-align:center;gap:1px}
+.water-ring-text strong{font-size:30px;letter-spacing:-.04em;color:#0284c7;line-height:1}
+.water-ring-text span{color:var(--muted);font-weight:800;font-size:13px}
+.water-ring-text small{color:#0ea5e9;font-weight:900;font-size:13px}
+.water-main{flex:1;min-width:0}
+.water-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+.water-head h2{margin:0;font-size:20px}.water-head p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.water-quick{display:flex;flex-wrap:wrap;gap:8px}
+.water-quick .wq{flex:1 1 86px}.water-quick .btn.primary{width:auto}
+.water-cfg{margin-top:14px;padding-top:14px;border-top:1px dashed rgba(14,165,233,.35);display:grid;gap:12px}
+.switch-row{display:flex!important;justify-content:space-between;align-items:center;gap:10px;background:rgba(14,165,233,.07);border:1px solid rgba(14,165,233,.18);border-radius:13px;padding:11px 13px;font-weight:800;color:#0369a1}
+.switch-row input{width:auto;height:22px;width:22px;accent-color:#0ea5e9}
+#reminderHelp{margin:0}
+@media(max-width:560px){.tabs{grid-template-columns:repeat(3,1fr)}.water-card{flex-direction:column;text-align:center}.water-quick{justify-content:center}}
+body.dark .wr-bg{stroke:rgba(56,189,248,.18)}body.dark .wr-fg{stroke:#38bdf8}
+body.dark .water-ring-text strong{color:#7dd3fc}body.dark .water-ring-text small{color:#38bdf8}
+body.dark .switch-row{background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.22);color:#7dd3fc}
+
+/* Giriş modalı */
+.modal-overlay{position:fixed;inset:0;background:rgba(2,6,23,.6);backdrop-filter:blur(3px);display:grid;place-items:center;z-index:1000;padding:18px}
+.modal-overlay.hidden{display:none}
+.modal-card{background:var(--surface);border-radius:var(--radius);padding:22px;width:100%;max-width:360px;box-shadow:var(--shadow);display:grid;gap:14px;animation:modalIn .2s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.modal-card h3{margin:0;font-size:19px;color:var(--text)}
+.modal-card label{display:grid;gap:6px;font-weight:800;font-size:13px;color:var(--muted)}
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:46px}
+.pass-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:17px;padding:6px;line-height:1;opacity:.65}
+.pass-toggle:hover{opacity:1}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
+.modal-actions .btn{width:auto}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="brand"><div class="logo">❤</div><div><h1>Tansiyon Kilo Takibi</h1><p>Tek dosyalık sağlık takip uygulaması</p></div></div><div class="actions"><button id="themeBtn" class="btn ghost" type="button">🌙 Koyu Mod</button><button id="emailLogin" class="btn ghost" type="button">E-posta Giriş</button><button id="emailSignup" class="btn ghost" type="button">Kayıt Ol</button><button id="login" class="btn ghost hidden" type="button">Google</button><button id="logout" class="btn ghost hidden">Çıkış</button></div></header>
+<section id="status" class="status"><span class="dot"></span><span id="statusText">Yerel mod: Veriler bu cihazda saklanıyor.</span></section>
+<section class="grid stats"><article class="stat danger"><span>Son Tansiyon</span><strong id="lastBp">—</strong><small id="lastBpMeta">Kayıt yok</small></article><article class="stat primary"><span>Son Kilo</span><strong id="lastWeight">—</strong><small id="lastWeightMeta">Kayıt yok</small></article><article class="stat success"><span>Bu Hafta Yürüyüş</span><strong id="weekWalk">0 dk</strong><small id="weekSteps">0 adım</small></article><article class="stat amber"><span>Bugünkü Öğün</span><strong id="todayMeals">0</strong><small id="todayCalories">0 kcal</small></article></section>
+<section class="grid stats avg"><article class="stat danger"><span>Haftalık Tansiyon Ort.</span><strong id="weekBpAvg">—</strong><small>Son 7 gün</small></article><article class="stat danger"><span>Aylık Tansiyon Ort.</span><strong id="monthBpAvg">—</strong><small>Son 30 gün</small></article><article class="stat primary"><span>Haftalık Kilo Ort.</span><strong id="weekWeightAvg">—</strong><small>Son 7 gün</small></article><article class="stat primary"><span>Aylık Kilo Ort.</span><strong id="monthWeightAvg">—</strong><small>Son 30 gün</small></article></section>
+<section id="waterCard" class="panel water-card">
+<div class="water-ring-wrap"><svg class="water-ring" viewBox="0 0 120 120"><circle class="wr-bg" cx="60" cy="60" r="52"></circle><circle id="wrProg" class="wr-fg" cx="60" cy="60" r="52"></circle></svg><div class="water-ring-text"><strong id="waterNow">0</strong><span id="waterGoalText">/ 0 ml</span><small id="waterPct">%0</small></div></div>
+<div class="water-main"><div class="water-head"><div><h2>💧 Su Takibi</h2><p id="waterHint">Kilona göre günlük su hedefin</p></div><button id="waterCfgBtn" class="btn ghost small" type="button">⚙ Ayarlar</button></div>
+<div class="water-quick"><button class="btn ghost wq" data-ml="200" type="button">+200 ml</button><button class="btn ghost wq" data-ml="330" type="button">+330 ml</button><button class="btn ghost wq" data-ml="500" type="button">+500 ml</button><button id="waterGlass" class="btn primary wq" type="button">+1 Bardak</button><button id="waterUndo" class="btn danger small" type="button">↶ Geri Al</button></div>
+<div id="waterCfg" class="water-cfg hidden">
+<label>Formül (ml / kg)<select id="mlPerKg"><option value="30">30 ml/kg — az hareketli</option><option value="33">33 ml/kg — normal</option><option value="35">35 ml/kg — aktif</option><option value="40">40 ml/kg — çok aktif / sıcak hava</option></select></label>
+<label class="switch-row"><span>🔔 Su içme hatırlatıcısı</span><input id="reminderOn" type="checkbox"></label>
+<div class="two"><label>Sıklık<select id="intervalMin"><option value="60">1 saatte bir</option><option value="90">1.5 saatte bir</option><option value="120">2 saatte bir</option><option value="180">3 saatte bir</option></select></label><label>Bardak boyu (ml)<input id="glassSize" type="number" min="50" max="1000" step="10" placeholder="250"></label></div>
+<div class="two"><label>Başlangıç saati<input id="startHour" type="number" min="0" max="23" placeholder="8"></label><label>Bitiş saati<input id="endHour" type="number" min="1" max="24" placeholder="22"></label></div>
+<div class="help" id="reminderHelp">Hatırlatıcı, uygulama açıkken veya ana ekrana eklenmiş (PWA) çalışırken bildirim gönderir. Telefonun bildirim iznini vermen gerekir.</div>
+</div></div>
+</section>
+<section class="layout"><aside class="panel form-panel"><div class="person-box"><div class="person-title"><span>👤 Kişi / Profil</span></div><label>Kişi Seç<select id="personSelect"></select></label><div class="person-actions"><button id="addPerson" class="btn ghost" type="button">+ Kişi Ekle</button><button id="deletePerson" class="btn danger" type="button">Kişi Sil</button></div><div class="person-note">Dashboard seçilen kişiye göre hesaplanır. “Tümü” seçiliyken kayıt eklemek için önce bir kişi seçin.</div></div><div class="tabs"><button class="tab active" data-type="bp">Tansiyon</button><button class="tab" data-type="weight">Kilo</button><button class="tab" data-type="walk">Yürüyüş</button><button class="tab" data-type="meal">Yeme</button><button class="tab" data-type="water">Su</button></div><form id="form"><input type="hidden" id="entryType" value="bp"><div class="time-row"><label>Tarih / Saat<input id="dateTime" type="datetime-local" required></label><button id="nowBtn" class="btn ghost" type="button">Şimdi</button></div><div id="bpFields"><div class="two"><label>Büyük<input id="systolic" type="number" min="50" max="260" placeholder="120"></label><label>Küçük<input id="diastolic" type="number" min="30" max="180" placeholder="80"></label></div><label>Nabız<input id="pulse" type="number" min="30" max="220" placeholder="75"></label></div><div id="weightFields" class="hidden"><label>Kilo (kg)<input id="weight" type="number" min="20" max="300" step="0.1" placeholder="78.5"></label></div><div id="walkFields" class="hidden"><div class="two"><label>Süre (dk)<input id="walkMinutes" type="number" min="1" max="1440" placeholder="30"></label><label>Adım<input id="steps" type="number" min="0" max="100000" placeholder="4000"></label></div><label>Mesafe (km)<input id="distance" type="number" min="0" max="100" step="0.01" placeholder="2.5"></label></div><div id="mealFields" class="hidden"><div class="two"><label>Öğün<select id="mealType"><option>Kahvaltı</option><option>Öğle</option><option>Akşam</option><option>Ara Öğün</option></select></label><label>Kalori<input id="calories" type="number" min="0" max="10000" placeholder="450"></label></div><label>Yediklerin<input id="food" maxlength="120" placeholder="Örn. Tavuk salata"></label></div><div id="waterFields" class="hidden"><label>Su miktarı (ml)<input id="ml" type="number" min="10" max="3000" step="10" placeholder="250"></label></div><label>Not<textarea id="note" rows="3" maxlength="300" placeholder="İsteğe bağlı not"></textarea></label><button class="btn primary" type="submit">Kaydet</button></form></aside><main class="panel dash"><div class="panel-head"><div><h2>Dashboard</h2><p>Son kayıtlar ve grafikler</p></div><div class="filters"><select id="filter"><option value="all">Tümü</option><option value="bp">Tansiyon</option><option value="weight">Kilo</option><option value="walk">Yürüyüş</option><option value="meal">Yeme</option><option value="water">Su</option></select><button id="export" class="btn ghost small">Dışa Aktar</button><label class="btn ghost small file">İçe Aktar<input id="import" type="file" accept="application/json"></label></div></div><div class="charts"><article class="chart"><h3>Tansiyon Trendi</h3><canvas id="bpChart" width="640" height="260"></canvas></article><article class="chart"><h3>Kilo Trendi</h3><canvas id="weightChart" width="640" height="260"></canvas></article></div><div class="rec-head"><h3>Kayıtlar</h3><button id="clear" class="btn danger small">Tüm Yerel Kayıtları Sil</button></div><div id="records" class="records"></div></main></section>
+</div>
+<div id="authModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="authTitle">E-posta ile giriş</h3><label>E-posta<input id="authEmail" type="email" autocomplete="email" inputmode="email" placeholder="ornek@mail.com"></label><label>Şifre (en az 6 karakter)<div class="pass-wrap"><input id="authPass" type="password" autocomplete="current-password" placeholder="••••••"><button id="authToggle" type="button" class="pass-toggle" aria-label="Şifreyi göster veya gizle">👁</button></div></label><div class="modal-actions"><button id="authCancel" class="btn ghost" type="button">Vazgeç</button><button id="authOk" class="btn primary" type="button">Devam</button></div></div></div>
+<script>
+// SUPABASE AYARLARI
+// Supabase > Project Settings > API bölümünden Project URL ve anon public key değerlerini buraya yazın.
+// Örnek:
+// const SUPABASE_URL = 'https://xxxx.supabase.co';
+// const SUPABASE_ANON_KEY = 'eyJhbGciOi...';
+const SUPABASE_URL = 'https://iuvjkovzbjscrqkmebrj.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_K_ouJFXq0mFa5J-FE37sYQ_2dpvqa9C';
+
+(() => {
+  const KEY = 'saglik.tekdosya.v1';
+  const PEOPLE_KEY = 'saglik.kisiler.v1';
+  const ACTIVE_PERSON_KEY = 'saglik.aktifKisi.v1';
+  const THEME_KEY = 'saglik.tema';
+
+  let records = [];
+  let people = [];
+  let currentPerson = 'all';
+  let filter = 'all';
+  let type = 'bp';
+  let sb = null;
+  let session = null;
+  let syncing = false;
+  let water = {mlPerKg:33, glass:250, reminderOn:false, intervalMin:120, startHour:8, endHour:22, lastNotify:0};
+
+  const $ = id => document.getElementById(id);
+  const cfg = {
+    bp: ['Tansiyon', '❤', '#dc2626'],
+    weight: ['Kilo', '⚖', '#0f766e'],
+    walk: ['Yürüyüş', '👟', '#16a34a'],
+    meal: ['Yeme', '🍽', '#d97706'],
+    water: ['Su', '💧', '#0ea5e9']
+  };
+
+  function pad(n){ return String(n).padStart(2, '0'); }
+  function localVal(d = new Date()){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; }
+  function fmt(iso){ return new Intl.DateTimeFormat('tr-TR', {dateStyle:'medium', timeStyle:'short'}).format(new Date(iso)); }
+  function dkey(iso){ const d = new Date(iso); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+  function uuid(){ return crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2); }
+  function safe(x){ return String(x ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
+
+  function save(){ localStorage.setItem(KEY, JSON.stringify(records)); }
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } }
+  function savePeople(){ localStorage.setItem(PEOPLE_KEY, JSON.stringify(people)); localStorage.setItem(ACTIVE_PERSON_KEY, currentPerson); }
+  function loadPeople(){ try { return JSON.parse(localStorage.getItem(PEOPLE_KEY) || '[]'); } catch { return []; } }
+  function sorted(a = records){ return [...a].sort((x,y) => new Date(y.dateTime) - new Date(x.dateTime)); }
+  function isCloud(){ return !!(sb && session && session.user); }
+
+  function status(t, on=false){ $('statusText').textContent = t; $('status').classList.toggle('online', on); }
+  function setStatusMode(){
+    if (isCloud()) status(`Bulut mod: ${session.user.email || 'Hesabınız'} Supabase ile senkronize.`, true);
+    else status('Yerel mod: Veriler bu cihazda saklanıyor. E-posta ile giriş yapınca Supabase buluta aktarılır.', false);
+  }
+
+  function applyTheme(t){
+    document.body.classList.toggle('dark', t === 'dark');
+    localStorage.setItem(THEME_KEY, t);
+    const b = $('themeBtn'); if (b) b.textContent = t === 'dark' ? '☀️ Açık Mod' : '🌙 Koyu Mod';
+    charts();
+  }
+  function initTheme(){ applyTheme(localStorage.getItem(THEME_KEY) || 'light'); }
+
+  function personName(id){ const p = people.find(x => x.id === id); return p ? p.name : 'Kişi Yok'; }
+  function activeRecords(){ return currentPerson === 'all' ? records : records.filter(r => (r.personId || 'p1') === currentPerson); }
+  function ensurePeople(){
+    people = loadPeople();
+    if (!people.length) people = [{id:'p1', name:'Ben'}];
+    records = records.map(r => r.personId ? r : {...r, personId:'p1'});
+    if (currentPerson !== 'all' && !people.some(p => p.id === currentPerson)) currentPerson = people[0]?.id || 'all';
+    save(); savePeople();
+  }
+  function renderPeople(){
+    const sel = $('personSelect'); if (!sel) return;
+    sel.innerHTML = '<option value="all">Tümü</option>' + people.map(p => `<option value="${safe(p.id)}">${safe(p.name)}</option>`).join('');
+    sel.value = currentPerson;
+    const del = $('deletePerson'); if (del) del.disabled = currentPerson === 'all' || people.length <= 1;
+  }
+
+  function setType(t){
+    type = t; $('entryType').value = t;
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.type === t));
+    ['bp','weight','walk','meal','water'].forEach(x => $(x+'Fields').classList.toggle('hidden', x !== t));
+  }
+
+  function read(){
+    if (currentPerson === 'all') throw Error('Kayıt eklemek için önce bir kişi seçin.');
+    const t = $('entryType').value;
+    const b = { id: uuid(), personId: currentPerson, type: t, dateTime: new Date($('dateTime').value).toISOString(), note: $('note').value.trim(), createdAt: new Date().toISOString() };
+    if (t === 'bp') {
+      const systolic = +$('systolic').value, diastolic = +$('diastolic').value, pulse = +$('pulse').value || 0;
+      if (!systolic || !diastolic) throw Error('Büyük ve küçük tansiyon zorunlu.');
+      return {...b, systolic, diastolic, pulse};
+    }
+    if (t === 'weight') {
+      const weight = +$('weight').value;
+      if (!weight) throw Error('Kilo zorunlu.');
+      return {...b, weight};
+    }
+    if (t === 'walk') {
+      const minutes = +$('walkMinutes').value || 0, steps = +$('steps').value || 0, distance = +$('distance').value || 0;
+      if (!minutes && !steps && !distance) throw Error('En az bir yürüyüş değeri girin.');
+      return {...b, minutes, steps, distance};
+    }
+    if (t === 'water') {
+      const ml = +$('ml').value;
+      if (!ml) throw Error('Su miktarı (ml) zorunlu.');
+      return {...b, ml};
+    }
+    const calories = +$('calories').value || 0, food = $('food').value.trim(), mealType = $('mealType').value;
+    if (!food && !calories) throw Error('Yemek veya kalori girin.');
+    return {...b, mealType, calories, food};
+  }
+
+  function recordData(r){
+    if (r.type === 'bp') return {systolic:r.systolic, diastolic:r.diastolic, pulse:r.pulse || 0};
+    if (r.type === 'weight') return {weight:r.weight};
+    if (r.type === 'walk') return {minutes:r.minutes || 0, steps:r.steps || 0, distance:r.distance || 0};
+    if (r.type === 'water') return {ml:r.ml || 0};
+    return {mealType:r.mealType || 'Öğün', calories:r.calories || 0, food:r.food || ''};
+  }
+  function recordToRow(r){
+    return { id:r.id, user_id:session.user.id, person_id:r.personId || 'p1', type:r.type, date_time:r.dateTime, note:r.note || '', data:recordData(r), created_at:r.createdAt || new Date().toISOString() };
+  }
+  function rowToRecord(row){
+    return { id:row.id, personId:row.person_id, type:row.type, dateTime:row.date_time, note:row.note || '', createdAt:row.created_at, ...(row.data || {}) };
+  }
+
+  async function upsertCloudPeople(list = people){
+    if (!isCloud() || !list.length) return;
+    const rows = list.map(p => ({id:p.id, user_id:session.user.id, name:p.name, created_at:p.createdAt || new Date().toISOString()}));
+    const {error} = await sb.from('people').upsert(rows, {onConflict:'id'});
+    if (error) throw error;
+  }
+  async function upsertCloudRecords(list = records){
+    if (!isCloud() || !list.length) return;
+    const rows = list.map(recordToRow);
+    const {error} = await sb.from('health_records').upsert(rows, {onConflict:'id'});
+    if (error) throw error;
+  }
+  async function uploadLocalToCloud(){
+    if (!isCloud() || syncing) return;
+    syncing = true;
+    try { ensurePeople(); await upsertCloudPeople(people); await upsertCloudRecords(records); }
+    catch(e){ console.error(e); alert('Supabase aktarım hatası: ' + e.message); }
+    finally { syncing = false; }
+  }
+  async function syncFromCloud(){
+    if (!isCloud()) return;
+    try {
+      const [pRes, rRes] = await Promise.all([
+        sb.from('people').select('*').eq('user_id', session.user.id).order('created_at', {ascending:true}),
+        sb.from('health_records').select('*').eq('user_id', session.user.id).order('date_time', {ascending:false})
+      ]);
+      if (pRes.error) throw pRes.error;
+      if (rRes.error) throw rRes.error;
+      people = (pRes.data || []).map(p => ({id:p.id, name:p.name, createdAt:p.created_at}));
+      records = (rRes.data || []).map(rowToRecord);
+      if (!people.length) people = [{id:'p1', name:'Ben'}];
+      if (currentPerson !== 'all' && !people.some(p => p.id === currentPerson)) currentPerson = people[0].id;
+      save(); savePeople(); renderPeople(); render(); setStatusMode();
+    } catch(e) {
+      console.error(e); alert('Supabase veri çekme hatası: ' + e.message);
+    }
+  }
+
+  async function add(r){
+    records = [r, ...records.filter(x => x.id !== r.id)]; save(); render();
+    if (isCloud()) { try { await upsertCloudRecords([r]); } catch(e){ alert('Buluta kaydedilemedi: ' + e.message); } }
+  }
+  async function del(id){
+    records = records.filter(r => r.id !== id); save(); render();
+    if (isCloud()) {
+      const {error} = await sb.from('health_records').delete().eq('user_id', session.user.id).eq('id', id);
+      if (error) alert('Buluttan silinemedi: ' + error.message);
+    }
+  }
+  async function addPerson(){
+    let name = prompt('Kişi adı yazın:'); if (!name) return; name = name.trim(); if (!name) return;
+    const p = {id: uuid(), name, createdAt:new Date().toISOString()};
+    people.push(p); currentPerson = p.id; savePeople(); renderPeople(); render();
+    if (isCloud()) { try { await upsertCloudPeople([p]); } catch(e){ alert('Kişi buluta kaydedilemedi: ' + e.message); } }
+  }
+  async function deletePerson(){
+    if (currentPerson === 'all') return alert('Silmek için önce bir kişi seçin.');
+    if (people.length <= 1) return alert('En az 1 kişi kalmalı.');
+    const id = currentPerson, name = personName(id);
+    if (!confirm(name + ' kişisi ve ona ait kayıtlar silinsin mi?')) return;
+    records = records.filter(r => (r.personId || 'p1') !== id);
+    people = people.filter(p => p.id !== id);
+    currentPerson = people[0].id;
+    save(); savePeople(); renderPeople(); render();
+    if (isCloud()) {
+      const e1 = await sb.from('health_records').delete().eq('user_id', session.user.id).eq('person_id', id);
+      const e2 = await sb.from('people').delete().eq('user_id', session.user.id).eq('id', id);
+      if (e1.error || e2.error) alert('Buluttan silme hatası: ' + (e1.error?.message || e2.error?.message));
+    }
+  }
+
+  function title(r){
+    if (r.type === 'bp') return `${r.systolic}/${r.diastolic} mmHg${r.pulse ? ' • Nabız ' + r.pulse : ''}`;
+    if (r.type === 'weight') return `${Number(r.weight).toFixed(1)} kg`;
+    if (r.type === 'walk') return `${r.minutes || 0} dk • ${r.steps || 0} adım${r.distance ? ' • ' + r.distance + ' km' : ''}`;
+    if (r.type === 'water') return `${r.ml || 0} ml su`;
+    return `${r.mealType || 'Öğün'}${r.food ? ' • ' + r.food : ''}${r.calories ? ' • ' + r.calories + ' kcal' : ''}`;
+  }
+
+  function stats(){
+    const base = activeRecords();
+    const bp = sorted(base.filter(r => r.type === 'bp'))[0];
+    $('lastBp').textContent = bp ? `${bp.systolic}/${bp.diastolic}` : '—';
+    $('lastBpMeta').textContent = bp ? fmt(bp.dateTime) + (bp.pulse ? ' • ' + bp.pulse + ' nabız' : '') : 'Kayıt yok';
+    const w = sorted(base.filter(r => r.type === 'weight'))[0];
+    $('lastWeight').textContent = w ? Number(w.weight).toFixed(1) + ' kg' : '—';
+    $('lastWeightMeta').textContent = w ? fmt(w.dateTime) : 'Kayıt yok';
+    const seven = new Date(); seven.setDate(seven.getDate()-6); seven.setHours(0,0,0,0);
+    const walks = base.filter(r => r.type === 'walk' && new Date(r.dateTime) >= seven);
+    $('weekWalk').textContent = walks.reduce((s,r) => s + (+r.minutes || 0), 0) + ' dk';
+    $('weekSteps').textContent = walks.reduce((s,r) => s + (+r.steps || 0), 0).toLocaleString('tr-TR') + ' adım';
+    const today = dkey(new Date().toISOString()), meals = base.filter(r => r.type === 'meal' && dkey(r.dateTime) === today);
+    $('todayMeals').textContent = meals.length;
+    $('todayCalories').textContent = meals.reduce((s,r) => s + (+r.calories || 0), 0) + ' kcal';
+  }
+  function avgStats(){
+    const base = activeRecords();
+    const since = d => { const x = new Date(); x.setDate(x.getDate()-d+1); x.setHours(0,0,0,0); return x; };
+    const avg = (arr,key) => arr.length ? arr.reduce((s,r) => s + (+r[key] || 0), 0) / arr.length : null;
+    const bpText = arr => arr.length ? Math.round(avg(arr,'systolic')) + '/' + Math.round(avg(arr,'diastolic')) : '—';
+    const wText = arr => { const v = avg(arr,'weight'); return v == null ? '—' : v.toFixed(1) + ' kg'; };
+    const w7 = since(7), w30 = since(30);
+    const bp7 = base.filter(r => r.type === 'bp' && new Date(r.dateTime) >= w7), bp30 = base.filter(r => r.type === 'bp' && new Date(r.dateTime) >= w30);
+    const kg7 = base.filter(r => r.type === 'weight' && new Date(r.dateTime) >= w7), kg30 = base.filter(r => r.type === 'weight' && new Date(r.dateTime) >= w30);
+    $('weekBpAvg').textContent = bpText(bp7); $('monthBpAvg').textContent = bpText(bp30);
+    $('weekWeightAvg').textContent = wText(kg7); $('monthWeightAvg').textContent = wText(kg30);
+  }
+  function chart(c, items, series){
+    const dark = document.body.classList.contains('dark'), ctx = c.getContext('2d'), W = c.width, H = c.height;
+    ctx.clearRect(0,0,W,H); ctx.fillStyle = dark ? '#020617' : '#f8fafc'; ctx.fillRect(0,0,W,H); ctx.strokeStyle = dark ? '#1e293b' : '#e2e8f0';
+    for (let i=0;i<5;i++){ const y = 28 + i*(H-58)/4; ctx.beginPath(); ctx.moveTo(42,y); ctx.lineTo(W-16,y); ctx.stroke(); }
+    if (!items.length){ ctx.fillStyle = dark ? '#94a3b8' : '#64748b'; ctx.font = '16px system-ui'; ctx.fillText('Henüz veri yok', W/2-48, H/2); return; }
+    const data = items.slice(-12), vals = data.flatMap(r => series.map(s => +r[s.key]).filter(Boolean));
+    const min = Math.min(...vals), max = Math.max(...vals), p = Math.max(5, (max-min)*.15), lo = min-p, hi = max+p;
+    const x = i => 48 + i*((W-78)/Math.max(1,data.length-1)), y = v => 22 + (hi-v)*((H-58)/(hi-lo || 1));
+    ctx.fillStyle = dark ? '#94a3b8' : '#64748b'; ctx.font = '12px system-ui'; ctx.fillText(Math.round(hi),8,32); ctx.fillText(Math.round(lo),8,H-30);
+    series.forEach(s => { ctx.strokeStyle=s.color; ctx.fillStyle=s.color; ctx.lineWidth=3; ctx.beginPath(); data.forEach((r,i)=>{ const xx=x(i), yy=y(+r[s.key]); i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); }); ctx.stroke(); data.forEach((r,i)=>{ ctx.beginPath(); ctx.arc(x(i),y(+r[s.key]),4,0,Math.PI*2); ctx.fill(); }); });
+  }
+  function charts(){
+    const base = activeRecords();
+    chart($('bpChart'), base.filter(r => r.type === 'bp').sort((a,b) => new Date(a.dateTime)-new Date(b.dateTime)), [{key:'systolic',color:'#dc2626'}, {key:'diastolic',color:'#2563eb'}]);
+    chart($('weightChart'), base.filter(r => r.type === 'weight').sort((a,b) => new Date(a.dateTime)-new Date(b.dateTime)), [{key:'weight',color:'#0f766e'}]);
+  }
+  function recs(){
+    const list = sorted(activeRecords()).filter(r => filter === 'all' || r.type === filter), box = $('records'); box.innerHTML = '';
+    if (!list.length){ box.innerHTML = '<div class="empty">Kayıt yok. Soldaki formdan ilk kaydını ekleyebilirsin.</div>'; return; }
+    list.forEach(r => {
+      const c = cfg[r.type], el = document.createElement('article'); el.className = 'record';
+      el.innerHTML = `<div class="ricon" style="background:${c[2]}">${c[1]}</div><div><strong>${safe(title(r))}</strong><span class="rmeta">${safe(personName(r.personId || 'p1'))} • ${c[0]} • ${fmt(r.dateTime)}</span><p class="rnote">${safe(r.note || '')}</p></div><button class="del">Sil</button>`;
+      el.querySelector('.del').onclick = () => confirm('Bu kayıt silinsin mi?') && del(r.id);
+      box.appendChild(el);
+    });
+  }
+  const WATER_KEY = 'saglik.su.v1';
+  function loadWaterCfg(){ try { water = {...water, ...(JSON.parse(localStorage.getItem(WATER_KEY) || '{}'))}; } catch {} }
+  function saveWaterCfg(){ localStorage.setItem(WATER_KEY, JSON.stringify(water)); }
+  function latestWeight(){ const w = sorted(activeRecords().filter(r => r.type === 'weight'))[0]; return w ? +w.weight : 0; }
+  function todayWaterMl(){ const t = dkey(new Date().toISOString()); return activeRecords().filter(r => r.type === 'water' && dkey(r.dateTime) === t).reduce((s,r) => s + (+r.ml || 0), 0); }
+  function todayWalkMin(){ const t = dkey(new Date().toISOString()); return activeRecords().filter(r => r.type === 'walk' && dkey(r.dateTime) === t).reduce((s,r) => s + (+r.minutes || 0), 0); }
+  function waterGoal(){
+    const kg = latestWeight(); if (!kg) return 0;
+    let ml = kg * water.mlPerKg + Math.floor(todayWalkMin()/30) * 350; // aktivite bonusu
+    return Math.round(ml/50) * 50;
+  }
+  async function addWater(ml){
+    if (currentPerson === 'all') return alert('Su eklemek için önce bir kişi seçin.');
+    if (!ml || ml <= 0) return;
+    await add({ id:uuid(), personId:currentPerson, type:'water', dateTime:new Date().toISOString(), note:'', createdAt:new Date().toISOString(), ml });
+  }
+  function undoWater(){
+    const t = dkey(new Date().toISOString());
+    const last = sorted(activeRecords().filter(r => r.type === 'water' && dkey(r.dateTime) === t))[0];
+    if (!last) return alert('Bugün geri alınacak su kaydı yok.');
+    del(last.id);
+  }
+  const RING_C = 2 * Math.PI * 52;
+  function renderWater(){
+    const goal = waterGoal(), now = todayWaterMl(), kg = latestWeight();
+    const pct = goal ? Math.min(100, Math.round(now/goal*100)) : 0;
+    $('waterNow').textContent = now;
+    $('waterGoalText').textContent = goal ? '/ ' + goal + ' ml' : '/ — ml';
+    $('waterPct').textContent = '%' + pct;
+    $('wrProg').style.strokeDashoffset = RING_C * (1 - pct/100);
+    if (currentPerson === 'all') $('waterHint').textContent = 'Önce bir kişi seç';
+    else if (!kg) $('waterHint').textContent = 'Hedef için önce bir Kilo kaydı gir';
+    else { const rem = Math.max(0, goal - now); $('waterHint').textContent = rem > 0 ? `${kg} kg • ${rem} ml kaldı` : '🎉 Günlük hedef tamam!'; }
+    // ayar alanlarını senkronla
+    $('mlPerKg').value = String(water.mlPerKg);
+    $('glassSize').value = water.glass;
+    $('intervalMin').value = String(water.intervalMin);
+    $('startHour').value = water.startHour;
+    $('endHour').value = water.endHour;
+    $('reminderOn').checked = !!water.reminderOn;
+    $('waterGlass').textContent = '+' + water.glass + ' ml';
+  }
+  function waterNotify(){
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    const goal = waterGoal(), rem = Math.max(0, goal - todayWaterMl());
+    const body = goal ? `Bugün ${todayWaterMl()} ml içtin. Hedefe ${rem} ml kaldı 💧` : 'Bir bardak su içme zamanı 💧';
+    const opts = { body, icon:'icon-192.png', badge:'icon-192.png', tag:'su-hatirlatici', renotify:true, lang:'tr' };
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+      navigator.serviceWorker.ready.then(reg => reg.showNotification('💧 Su Hatırlatıcı', opts)).catch(() => { try { new Notification('💧 Su Hatırlatıcı', opts); } catch {} });
+    } else { try { new Notification('💧 Su Hatırlatıcı', opts); } catch {} }
+    water.lastNotify = Date.now(); saveWaterCfg();
+  }
+  function waterTick(){
+    if (!water.reminderOn || !('Notification' in window) || Notification.permission !== 'granted') return;
+    const h = new Date().getHours();
+    if (h < water.startHour || h >= water.endHour) return;
+    const goal = waterGoal();
+    if (goal && todayWaterMl() >= goal) return; // hedef dolduysa rahatsız etme
+    if (Date.now() - (water.lastNotify || 0) >= water.intervalMin * 60000) waterNotify();
+  }
+  async function toggleReminder(on){
+    if (on) {
+      if (!('Notification' in window)) { alert('Bu tarayıcı bildirimleri desteklemiyor.'); $('reminderOn').checked = false; return; }
+      let perm = Notification.permission;
+      if (perm !== 'granted') perm = await Notification.requestPermission();
+      if (perm !== 'granted') { alert('Bildirim izni verilmedi. Telefon/tarayıcı ayarlarından izin verebilirsin.'); $('reminderOn').checked = false; water.reminderOn = false; saveWaterCfg(); return; }
+      water.reminderOn = true; water.lastNotify = Date.now() - water.intervalMin * 60000; saveWaterCfg();
+      waterNotify(); // anında test bildirimi
+    } else { water.reminderOn = false; saveWaterCfg(); }
+  }
+  function waterEvents(){
+    document.querySelectorAll('.water-quick .wq[data-ml]').forEach(b => b.onclick = () => addWater(+b.dataset.ml));
+    $('waterGlass').onclick = () => addWater(water.glass);
+    $('waterUndo').onclick = undoWater;
+    $('waterCfgBtn').onclick = () => $('waterCfg').classList.toggle('hidden');
+    $('mlPerKg').onchange = e => { water.mlPerKg = +e.target.value; saveWaterCfg(); renderWater(); };
+    $('glassSize').onchange = e => { water.glass = Math.max(50, Math.min(1000, +e.target.value || 250)); saveWaterCfg(); renderWater(); };
+    $('intervalMin').onchange = e => { water.intervalMin = +e.target.value; saveWaterCfg(); };
+    $('startHour').onchange = e => { water.startHour = Math.max(0, Math.min(23, +e.target.value || 0)); saveWaterCfg(); };
+    $('endHour').onchange = e => { water.endHour = Math.max(1, Math.min(24, +e.target.value || 22)); saveWaterCfg(); };
+    $('reminderOn').onchange = e => toggleReminder(e.target.checked);
+    setInterval(waterTick, 60000);
+  }
+
+  function render(){ stats(); avgStats(); charts(); recs(); renderWater(); }
+
+  async function initSupabase(){
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) { setStatusMode(); return; }
+    try {
+      const mod = await import('https://esm.sh/@supabase/supabase-js@2');
+      sb = mod.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true} });
+      const {data} = await sb.auth.getSession();
+      session = data.session;
+      $('logout').classList.toggle('hidden', !session);
+      $('login').textContent = session ? 'Bulut Senkron' : 'Google';
+      $('emailLogin').classList.toggle('hidden', !!session); $('emailSignup').classList.toggle('hidden', !!session);
+      setStatusMode();
+      if (session) { await uploadLocalToCloud(); await syncFromCloud(); }
+      sb.auth.onAuthStateChange(async (_event, newSession) => {
+        session = newSession;
+        $('logout').classList.toggle('hidden', !session);
+        $('login').textContent = session ? 'Bulut Senkron' : 'Google';
+        $('emailLogin').classList.toggle('hidden', !!session); $('emailSignup').classList.toggle('hidden', !!session);
+        setStatusMode();
+        if (session) { await uploadLocalToCloud(); await syncFromCloud(); }
+      });
+    } catch(e) { console.error(e); alert('Supabase başlatılamadı: ' + e.message); }
+  }
+  function askEmailPass(title){
+    return new Promise(resolve => {
+      const modal = $('authModal'), em = $('authEmail'), pw = $('authPass'), tog = $('authToggle');
+      $('authTitle').textContent = title;
+      em.value = ''; pw.value = ''; pw.type = 'password'; tog.textContent = '👁';
+      modal.classList.remove('hidden');
+      setTimeout(() => em.focus(), 50);
+      const close = (val) => {
+        modal.classList.add('hidden');
+        tog.onclick = $('authOk').onclick = $('authCancel').onclick = modal.onclick = em.onkeydown = pw.onkeydown = null;
+        resolve(val);
+      };
+      tog.onclick = () => { const show = pw.type === 'password'; pw.type = show ? 'text' : 'password'; tog.textContent = show ? '🙈' : '👁'; pw.focus(); };
+      $('authCancel').onclick = () => close(null);
+      $('authOk').onclick = () => {
+        const email = em.value.trim(), password = pw.value;
+        if (!email) return alert('E-posta adresini gir.');
+        if (password.length < 6) return alert('Şifre en az 6 karakter olmalı.');
+        close({email, password});
+      };
+      modal.onclick = (e) => { if (e.target === modal) close(null); };
+      em.onkeydown = pw.onkeydown = (e) => { if (e.key === 'Enter') $('authOk').onclick(); };
+    });
+  }
+  async function ensureSupabaseReady(){
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) { alert('Supabase için SUPABASE_URL ve SUPABASE_ANON_KEY alanları doldurulmalı.'); return false; }
+    if (!sb) await initSupabase();
+    return !!sb;
+  }
+  async function emailLogin(){
+    if (!(await ensureSupabaseReady())) return;
+    const v = await askEmailPass('E-posta ile giriş'); if (!v) return;
+    const {error} = await sb.auth.signInWithPassword({email:v.email, password:v.password});
+    if (error) return alert('Giriş başarısız: ' + error.message);
+    alert('Giriş başarılı. Veriler Supabase ile senkronize edilecek.');
+  }
+  async function emailSignup(){
+    if (!(await ensureSupabaseReady())) return;
+    const v = await askEmailPass('Yeni hesap oluştur'); if (!v) return;
+    const redirectTo = location.href.split('#')[0];
+    const {error} = await sb.auth.signUp({email:v.email, password:v.password, options:{emailRedirectTo:redirectTo}});
+    if (error) return alert('Kayıt başarısız: ' + error.message);
+    alert('Kayıt oluşturuldu. Supabase e-posta onayı açıksa gelen kutundaki onay linkine tıkla, sonra E-posta Giriş yap.');
+  }
+  async function login(){
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return alert('Supabase için dosyanın üstündeki SUPABASE_URL ve SUPABASE_ANON_KEY alanlarını doldurun.');
+    if (!sb) await initSupabase();
+    if (isCloud()) { await uploadLocalToCloud(); await syncFromCloud(); return alert('Bulut senkron tamamlandı.'); }
+    const redirectTo = location.href.split('#')[0];
+    const {error} = await sb.auth.signInWithOAuth({provider:'google', options:{redirectTo}});
+    if (error) alert('Google girişi başlatılamadı: ' + error.message);
+  }
+  async function logout(){ if (sb) await sb.auth.signOut(); session = null; setStatusMode(); $('logout').classList.add('hidden'); $('login').textContent = 'Google'; $('emailLogin').classList.remove('hidden'); $('emailSignup').classList.remove('hidden'); }
+
+  function events(){
+    $('themeBtn').onclick = () => applyTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
+    $('personSelect').onchange = e => { currentPerson = e.target.value; savePeople(); renderPeople(); render(); };
+    $('addPerson').onclick = addPerson; $('deletePerson').onclick = deletePerson;
+    document.querySelectorAll('.tab').forEach(b => b.onclick = () => setType(b.dataset.type));
+    $('nowBtn').onclick = () => { $('dateTime').value = localVal(); delete $('dateTime').dataset.changed; };
+    setInterval(() => { const el = $('dateTime'); if (document.activeElement !== el && !el.dataset.changed) el.value = localVal(); }, 60000);
+    $('dateTime').addEventListener('input', () => { $('dateTime').dataset.changed = '1'; });
+    $('form').onsubmit = async e => { e.preventDefault(); try { if (!$('dateTime').value) $('dateTime').value = localVal(); await add(read()); $('form').reset(); delete $('dateTime').dataset.changed; $('dateTime').value = localVal(); setType(type); } catch(err){ alert(err.message); } };
+    $('filter').onchange = e => { filter = e.target.value; recs(); };
+    $('export').onclick = () => { const blob = new Blob([JSON.stringify({people, records}, null, 2)], {type:'application/json'}), a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'saglik-kayitlari-' + dkey(new Date().toISOString()) + '.json'; a.click(); URL.revokeObjectURL(a.href); };
+    $('import').onchange = async e => {
+      const f = e.target.files[0]; if (!f) return;
+      try {
+        const imp = JSON.parse(await f.text()), impRecords = Array.isArray(imp) ? imp : (imp.records || []), impPeople = Array.isArray(imp) ? [] : (imp.people || []);
+        if (!Array.isArray(impRecords)) throw Error('Dosya formatı uygun değil.');
+        const pm = new Map([...people, ...impPeople].filter(p => p.id && p.name).map(p => [p.id, p])); people = [...pm.values()];
+        const rm = new Map([...records, ...impRecords].filter(r => r.id && r.type).map(r => [r.id, r.personId ? r : {...r, personId:'p1'}])); records = [...rm.values()];
+        ensurePeople(); renderPeople(); save(); render(); if (isCloud()) await uploadLocalToCloud();
+      } catch(err){ alert('İçe aktarma başarısız: ' + err.message); }
+      e.target.value = '';
+    };
+    $('clear').onclick = () => { if (confirm('Bu cihazdaki yerel kayıtlar silinsin mi? Bulut hesabınız açıksa Supabase kayıtları silinmez.')) { records = []; save(); render(); } };
+    $('emailLogin').onclick = emailLogin; $('emailSignup').onclick = emailSignup; $('login').onclick = login; $('logout').onclick = logout;
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    $('dateTime').value = localVal();
+    records = load(); currentPerson = localStorage.getItem(ACTIVE_PERSON_KEY) || 'all'; ensurePeople();
+    loadWaterCfg();
+    initTheme(); events(); waterEvents(); renderPeople(); setType('bp'); render(); setStatusMode();
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW kaydı başarısız:', e));
+    }
+    await initSupabase();
+  });
+})();
+</script>
+</body>
+</html>
